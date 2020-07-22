@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mapper.EasybuyCollectDao">
+             <!-- 收藏商品 -->
+             <insert id="addCollect" parameterType="EasybuyCollect" >
+             INSERT  INTO `easybuy_collect`(`id`,`userId`,`productId`,`productNum`,`type`)
+              VALUES (DEFAULT,#{userId},#{productId},#{productNum},#{type})
+             </insert>
+             <!-- 获得收藏列表 -->
+             <select id="select" resultType="EasybuyCollect">
+             SELECT id,userId,productId,productNum,`type` FROM easybuy_collect
+             </select>
+             <!-- 收藏商品 -->
+             <select id="selectId" resultType="EasybuyCollect" parameterType="Integer">
+               SELECT * FROM  easybuy_collect WHERE userId=#{userId} AND productId=#{productId}
+             </select>
+             <!-- 根据用户查询商品收藏 -->
+             <select id="selectByUserId" resultType="EasybuyCollect" parameterType="Integer">
+             <if test="userId>0">  SELECT id,userId,productId,productNum,`type` FROM easybuy_collect WHERE userId=#{userId}</if>
+               <if test="userId==0 or userId==null or userId==''">SELECT id,userId,productId,productNum,`type` FROM easybuy_collect</if>
+             </select>
+             <!-- 删除收藏商品 -->
+             <delete id="delCollect" parameterType="Integer">
+               DELETE  FROM easybuy_collect WHERE id=#{id}
+             </delete>
+</mapper>

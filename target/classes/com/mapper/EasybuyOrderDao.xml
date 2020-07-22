@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mapper.EasybuyOrderDao">
+      <!-- 根据用户信息查询对应订单信息！ -->
+      <select id="findEasybuyOrderList" resultType="EasybuyOrder" parameterType="Integer">
+      SELECT id,userId,loginName,userAddress,createTime,cost,`status`,`type`,serialNumber FROM easybuy_order WHERE userId =#{userId}  ORDER BY createTime DESC LIMIT #{from},#{pageSize}
+      </select>
+      <!-- 查询全部订单 -->
+        <select id="findEasybuyOrderList1" resultType="EasybuyOrder" >
+      SELECT id,userId,loginName,userAddress,createTime,cost,`status`,`type`,serialNumber FROM easybuy_order ORDER BY createTime DESC LIMIT #{from},#{pageSize}
+      </select>
+      <!-- 获得总记录条数 -->
+      <select id="getTotalCount" resultType="Integer">
+         SELECT COUNT(1) FROM easybuy_order 
+      </select>
+      <!-- 根据ID查询订单信息！ -->
+      <select id="findUserByIdOrder" resultType="Integer">
+      SELECT COUNT(1) FROM easybuy_order WHERE userId= #{userId}
+      </select>
+</mapper>

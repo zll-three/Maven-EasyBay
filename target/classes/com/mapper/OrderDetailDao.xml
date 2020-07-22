@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mapper.OrderDetailDao">
+                      <insert id="saveOrderDetail" parameterType="EasybuyOrderDetail">
+		         <!-- <selectKey resultType="int" order="AFTER" keyProperty="id">
+                    SELECT LAST_INSERT_ID()
+     	        </selectKey> -->
+		   
+
+					insert into easybuy_order_detail(orderId,productId,quantity,cost) 
+					values(#{orderId},#{productId},#{quantity},#{cost})
+	         </insert>
+</mapper>

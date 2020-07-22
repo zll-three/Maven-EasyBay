@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mapper.ProductCategoryDao">
+              <!-- 查询商品分类信息 -->
+              <select id="getProductCategoryList" resultType="EasybuyProductCategory">
+              SELECT id,`name`,parentId,`type` FROM   easybuy_product_category WHERE `type`=#{type}
+			   ORDER BY `name` DESC
+              </select>
+              <!-- 根据id查询具体商品信息 -->
+              <select id="getProductCategoryById" resultType="EasybuyProductCategory">
+              SELECT `id`,`name`,`parentId`,`type` FROM easybuy_product_category WHERE id=#{id}
+              </select>
+              <!-- 查询所有商品信息 -->
+              <select id="findEasybuyProductCategoryAll" resultType="EasybuyProductCategory">
+              SELECT epc1.*,epc2.name AS parentName
+              FROM easybuy_product_category epc1 
+              LEFT JOIN easybuy_product_category epc2 ON epc1.parentId=epc2.id LIMIT #{from},#{pageSize}
+              </select>
+              <select id="findEasybuyProductCategoryAll1" resultType="EasybuyProductCategory">
+              SELECT epc1.*,epc2.name AS parentName
+              FROM easybuy_product_category epc1 
+              LEFT JOIN easybuy_product_category epc2 ON epc1.parentId=epc2.id
+              </select>
+              <!-- 获取总记录条数 -->
+              <select id="getTotalCount" resultType="Integer">
+              SELECT COUNT(1) FROM easybuy_product_category
+              </select>
+              <!-- 根据id删除商品 -->
+              <delete id="delEasybuyProductCategoryById" parameterType="Integer">
+              DELETE FROM easybuy_product_category WHERE id = #{id}
+              </delete>
+              <!-- 一级分类 -->
+              <select id="findProductCategoryListOne" resultType="EasybuyProductCategory">
+              SELECT `id`,`name`,`parentId`,`type` FROM easybuy_product_category WHERE `type`=1
+              </select>
+              <!-- 二级分类 -->
+              <select id="findProductCategoryListTwo" resultType="EasybuyProductCategory">
+              SELECT `id`,`name`,`parentId`,`type` FROM easybuy_product_category WHERE `type`=2
+              </select>
+              <!-- 三级分类 -->
+              <select id="findProductCategoryListThree" resultType="EasybuyProductCategory">
+               SELECT `id`,`name`,`parentId`,`type` FROM easybuy_product_category WHERE `type`=3
+              </select>
+              <!-- 根据父分类查询商品分类 -->
+              <select id="getProductCategoryListByparentId" resultType="EasybuyProductCategory">
+              SELECT id,`name`,parentId,`type`
+               FROM easybuy_product_category  
+               WHERE `type`=#{typeId} AND parentId=#{parentId}
+              </select>
+              <!-- 新增商品分类 -->
+              <insert id="insertEasybuyProductCategory" parameterType="EasybuyProductCategory">
+              <if test="id==0">
+                INSERT  INTO `easybuy_product_category`(`name`,`parentId`,`type`) 
+                VALUES(#{name},#{parentId},#{type})
+              </if>
+              <if test="id!=0 or id>0">
+              UPDATE easybuy_product_category
+                <set>
+                <if test="name!=null">name=#{name},</if>
+                <if test="parentId!=null">parentId=#{parentId},</if>
+                <if test="type!=null">type=#{type}</if>
+                </set>
+                WHERE id=#{id}
+              </if>
+              </insert>
+              <!-- 根据删除的商品分类父ID编号，去查询一遍外键表中是否有数据 -->
+              <select id="findParentId" resultType="Integer">
+              SELECT COUNT(1) FROM easybuy_product_category WHERE parentId =#{parentId }
+              </select>
+              <!-- 查询分类是否存在商品 -->
+              <select id="getProductById" resultType="Integer">
+              <if test="typeid==1">
+              SELECT COUNT(1) FROM easybuy_product WHERE 1=1 
+	           AND categoryLevel1 =#{id}
+              </if>
+              <if test="typeid==2">
+              SELECT COUNT(1) FROM easybuy_product WHERE 1=1 
+	           AND categoryLevel2 =#{id}
+              </if>
+              <if test="typeid==3">
+              SELECT COUNT(1) FROM easybuy_product WHERE 1=1 
+	           AND categoryLevel3 =#{id}
+              </if>
+              </select>
+              
+</mapper>

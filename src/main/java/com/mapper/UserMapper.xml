@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mapper.UserMapper">
+       <!--登录易买网查询方法  -->
+         <select id="findEasybuyUserInfo" parameterType="Map" resultType="EasybuyUser">
+                         SELECT * FROM `easybuy_user`
+                      <trim prefix="where" prefixOverrides="and | or">
+                        <if test="loginName !=null">
+                        loginName =#{loginName }
+                        </if>
+                        <if test="password   !=null">
+                         AND password   =#{password  }
+                        </if> 
+                      </trim>     
+         </select>
+      <!-- 用户信息注册 -->
+      <insert id="addRegisterInfo" parameterType="EasybuyUser">
+        INSERT INTO `easybuy_user`(`id`,`loginName`,`password`,`userName`,`sex`,`identityCode`,`email`,`mobile`,`type`)
+        VALUES(DEFAULT,#{loginName},#{password},#{userName},#{sex},#{identityCode},#{email},#{mobile},#{type})
+      </insert>
+      <!-- 查询所有用户信息 -->
+      <select id="findEasybuyUserAll" resultType="EasybuyUser">
+          SELECT `id`,`loginName`,`userName`,`password`,`sex`,`identityCode`,`email`,`mobile`,`type` 
+          FROM `easybuy_user` limit #{from},#{pageSize}
+      </select>
+      <!-- 根据用户id删除用户 -->
+      <delete id="delEasybuyUserById" parameterType="Integer">
+      DELETE FROM `easybuy_user` WHERE `id` = #{id}
+      </delete>
+      <!-- 查询用户总记录条数 -->
+      <select id="getTotalCount" resultType="Integer">
+        SELECT COUNT(1) FROM easybuy_user
+      </select>
+      <!-- 根据用户id查询具体信息 -->
+      <select id="findEasybuyUserById" parameterType="Integer" resultType="EasybuyUser">
+      SELECT `id`,`userName`,`loginName`,`password`,`sex`,`identityCode`,`email`,`mobile`,`type` FROM easybuy_user WHERE id = #{id}
+      </select>
+      <!-- 根据用户ID更新用户信息！ -->
+      <update id="modifyEasybuyUserById" parameterType="EasybuyUser">
+      UPDATE easybuy_user 
+        <set>
+          <if test="userName!=null">userName=#{userName},</if>
+          <if test="loginName!=null">loginName=#{loginName},</if>
+          <if test="identityCode!=null">identityCode=#{identityCode},</if>
+          <if test="sex!=null">sex=#{sex},</if>
+          <if test="email!=null">email=#{email},</if>
+          <if test="mobile!=null">mobile=#{mobile},</if>
+          <if test="password!=null">password=#{password},</if>
+          <if test="type!=null">type=#{type}</if>
+        </set>
+         WHERE id = #{id}
+
+      </update>
+      <!--  查询是否存在相同的用户名！ -->
+      <select id="findLoginNameByName" resultType="Integer" parameterType="EasybuyUser">
+      SELECT COUNT(1) FROM `easybuy_user` WHERE `loginName` = #{loginName}
+      </select>
+      <!-- 修改密码操作验证 -->
+      <select id="findUserPasswordBy" resultType="Integer" parameterType="EasybuyUser">
+      SELECT COUNT(1) FROM easybuy_user WHERE loginName=#{name}
+      
+       <if test="email=='mobile'">and mobile=#{value}</if> 
+       <if test="email=='email'"> and email=#{value}</if> 
+      </select>
+      
+      <!-- 根据用户名修改该用户密码 -->
+      <update id="updateUserPasswordBy" parameterType="EasybuyUser">
+      UPDATE easybuy_user
+        <set>
+        <if test="password!=null">password=#{password}</if>
+        </set>
+        WHERE loginName =#{name}
+      </update>
+</mapper>

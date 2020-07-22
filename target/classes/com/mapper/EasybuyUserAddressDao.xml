@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mapper.EasybuyUserAddressDao">
+           <!-- 根据用户id查询用户对应的地址信息 -->
+           <select id="findEasybuyUserAddressAll" resultType="EasybuyUserAddress" parameterType="Integer">
+           SELECT id,address,createTime,userId,isDefault,remark FROM easybuy_user_address WHERE userId = #{userId}
+           </select>
+           <!-- 根据登陆用户ID新增数据 -->
+           <insert id="updateEasybuyUserAddressById" parameterType="EasybuyUserAddress">
+            INSERT INTO easybuy_user_address(address,createTime,userId,isDefault,remark) 
+            VALUES(#{address},NOW(),#{userId},0,#{remark})
+           </insert>
+           <!--根据id查询收货地址-->
+           <select id="getUserAddressById"  resultType="EasybuyUserAddress" parameterType="Integer">
+           SELECT id,address,createTime,userId,isDefault,remark FROM easybuy_user_address WHERE id =#{id}
+           </select>
+           <!--根据用户id判断地址是否存在-->
+           <select id="findUserByIdAddress" resultType="Integer">
+           SELECT COUNT(1) FROM easybuy_user_address WHERE userId =#{userId}
+           </select>
+</mapper>
